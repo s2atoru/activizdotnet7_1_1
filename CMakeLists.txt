@@ -267,7 +267,7 @@ set(AVDN_VTK_DATA_ROOT "${VTK_DIR}/ExternalData/Testing")
 #
 set(AVDN_SNKEYFILE "" CACHE FILEPATH "Specify the SNKEY" )
 if(AVDN_SNKEYFILE STREQUAL "")
-  get_filename_component(AVDN_SNKEYFILE "${ActiVizDotNet_SOURCE_DIR}/Kitware.VTK.pub.snk" ABSOLUTE)
+  get_filename_component(AVDN_SNKEYFILE "${ActiVizDotNet_SOURCE_DIR}/ss.VTK.snk" ABSOLUTE)
 endif()
 
 
@@ -829,7 +829,6 @@ if(AVDN_DO_COPY_LIBRARIES_STEPS)
         vtkalglib
         vtkDICOMParser
         vtkexoIIc
-        vtkftgl
         vtkhdf5
         vtkhdf5_hl
         vtkmetaio
@@ -838,6 +837,7 @@ if(AVDN_DO_COPY_LIBRARIES_STEPS)
         vtksys
         vtkverdict
 		vtkjsoncpp
+		vtkglew
       )
 
       IF(NOT AVDN_VTK_USE_SYSTEM_EXPAT)
@@ -1041,7 +1041,8 @@ else()
       endif()
       target_link_libraries(Kitware.VTK.${module}.Unmanaged ${module})
       # This is odd and should be changed (by JJ)
-      target_link_libraries(Kitware.VTK.${module}.Unmanaged vtkRenderingFreeTypeOpenGL vtkRenderingFreeType vtkInteractionStyle vtkRenderingVolumeOpenGL)
+      SET(vtk_lib_dir "${VTK_DIR}/lib/${CMAKE_CFG_INTDIR}")
+      target_link_libraries(Kitware.VTK.${module}.Unmanaged ${vtk_lib_dir}/vtkRenderingContextOpenGL2-7.1.lib ${vtk_lib_dir}/vtkRenderingOpenGL2-7.1.lib ${vtk_lib_dir}/vtkRenderingFreeType-7.1.lib ${vtk_lib_dir}/vtkRenderingVolumeOpenGL2-7.1.lib ${vtk_lib_dir}/vtkInteractionStyle-7.1.lib ${vtk_lib_dir}/vtkRenderingGL2PSOpenGL2-7.1.lib ${vtk_lib_dir}/vtkDomainsChemistryOpenGL2-7.1.lib)
       foreach(dep ${${module}_LINK_DEPENDS})
         if(NOT "${dep}" STREQUAL "${module}")
           if(NOT ${dep}_EXCLUDE_FROM_WRAPPING)
